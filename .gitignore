@@ -39,3 +39,9 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# project management files
+.bmad-core/
+.claude/
+.ignore/
+docs/
