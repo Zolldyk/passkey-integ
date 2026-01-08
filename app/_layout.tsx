@@ -1,8 +1,7 @@
 // CRITICAL: Import polyfills FIRST, in this exact order
-// These polyfills are required for @solana/web3.js to function correctly in React Native
-import 'react-native-get-random-values'; // MUST be first - provides crypto randomness for Solana SDK
-import 'react-native-url-polyfill/auto'; // MUST be second - provides URL API for Solana RPC and deep linking
-import { Buffer } from 'buffer'; // MUST be third - provides Buffer for Solana binary operations
+// Note: react-native-get-random-values is imported by @lazorkit/wallet-mobile-adapter internally
+import 'react-native-url-polyfill/auto'; // MUST be first - provides URL API for Solana RPC and deep linking
+import { Buffer } from 'buffer'; // MUST be second - provides Buffer for Solana binary operations
 global.Buffer = global.Buffer || Buffer; // Assign Buffer to global namespace
 
 // Now safe to import other modules after polyfills are loaded
