@@ -1,7 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native';
-import { useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useWallet } from '@lazorkit/wallet-mobile-adapter';
+import { WalletService } from '../services/WalletService';
+import { AddressDisplay } from '../components/AddressDisplay';
+import { Colors, Typography, Spacing, BorderRadius } from '../services/constants';
 
 /**
  * Wallet Home Screen
@@ -11,6 +14,7 @@ import { useWallet } from '@lazorkit/wallet-mobile-adapter';
 export default function HomeScreen() {
   const wallet = useWallet();
   const router = useRouter();
+  const [disconnecting, setDisconnecting] = useState(false);
 
   /**
    * Protected route: Redirect to welcome screen if wallet is not connected.
@@ -22,21 +26,77 @@ export default function HomeScreen() {
     }
   }, [wallet.isConnected, router]);
 
+  /**
+   * Handle wallet disconnect.
+   * Clears persisted session from SecureStore before disconnecting wallet.
+   * Shows loading state during disconnect process.
+   */
+  const handleDisconnect = async () => {
+    try {
+      setDisconnecting(true);
+
+      // Clear persisted session before disconnecting wallet
+      await WalletService.clearSession();
+      if (__DEV__) {
+        console.log('[HomeScreen] Session cleared, disconnecting wallet');
+      }
+
+      // Disconnect wallet and navigate to welcome screen
+      await wallet.disconnect();
+      router.replace('/');
+    } catch (error) {
+      // Log error but still attempt disconnect and navigation
+      console.error('[HomeScreen] Error during disconnect:', error);
+
+      try {
+        await wallet.disconnect();
+        router.replace('/');
+      } catch (disconnectError) {
+        console.error('[HomeScreen] Failed to disconnect wallet:', disconnectError);
+      }
+    } finally {
+      setDisconnecting(false);
+    }
+  };
+
   // Don't render anything while checking connection state
   if (!wallet.isConnected) return null;
 
   return (
     <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Your Wallet</Text>
+      <Text style={styles.title}>Your Wallet</Text>
 
-        <View style={styles.addressContainer}>
-          <Text style={styles.addressLabel}>Wallet Address</Text>
-          <Text style={styles.address}>
-            {wallet.smartWalletPubkey?.toString()}
-          </Text>
-        </View>
+      {/* Display wallet address with copy functionality */}
+      <View style={styles.addressContainer}>
+        <AddressDisplay
+          address={wallet.smartWalletPubkey?.toString() || ''}
+          truncate={true}
+          showCopyButton={true}
+        />
       </View>
+
+      {/* Placeholder for balance (Epic 2 feature) */}
+      <Text style={styles.balanceText}>Balance: Coming soon in Epic 2</Text>
+
+      {/* Disconnect button with loading state */}
+      <TouchableOpacity
+        style={[
+          styles.disconnectButton,
+          disconnecting && styles.disabledButton,
+        ]}
+        onPress={handleDisconnect}
+        disabled={disconnecting}
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Disconnect wallet"
+        accessibilityHint="Clears session and returns to welcome screen"
+      >
+        {disconnecting ? (
+          <ActivityIndicator color={Colors.neutral[900]} />
+        ) : (
+          <Text style={styles.disconnectButtonText}>Disconnect Wallet</Text>
+        )}
+      </TouchableOpacity>
     </View>
   );
 }
@@ -44,40 +104,40 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FAFAFA', // Neutral background
-    paddingTop: 64, // Generous top spacing
-    paddingHorizontal: 24,
-  },
-  content: {
-    flex: 1,
-    maxWidth: 400,
-    alignSelf: 'center',
-    width: '100%',
+    backgroundColor: Colors.neutral[50], // Light background
+    padding: Spacing.xl, // 24pt padding
   },
   title: {
-    fontSize: 24, // H2 size
-    fontWeight: '700', // Bold
-    color: '#171717', // Neutral text
-    marginBottom: 32, // Generous white space
+    fontSize: Typography.fontSize.h2, // 24pt
+    fontWeight: Typography.fontWeight.bold, // 700
+    color: Colors.neutral[900], // Dark text
+    marginBottom: Spacing.xl, // 24pt
   },
   addressContainer: {
-    backgroundColor: '#FFFFFF',
-    padding: 16,
-    borderRadius: 8,
+    marginVertical: Spacing.xxl, // 32pt vertical margin
+  },
+  balanceText: {
+    fontSize: Typography.fontSize.body, // 15pt
+    color: Colors.neutral[900],
+    marginVertical: Spacing.lg, // 16pt
+  },
+  disconnectButton: {
+    height: 44, // WCAG AA minimum touch target
+    paddingHorizontal: Spacing.lg, // 16pt
+    borderRadius: BorderRadius.sm, // 8pt
     borderWidth: 1,
-    borderColor: '#E5E5E5',
+    borderColor: '#ccc',
+    backgroundColor: '#fff',
+    marginTop: Spacing.xxxl, // 48pt for generous spacing
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  addressLabel: {
-    fontSize: 13,
-    fontWeight: '600', // Semibold
-    color: '#737373', // Neutral 500
-    marginBottom: 8,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+  disconnectButtonText: {
+    fontSize: Typography.fontSize.body, // 15pt
+    color: Colors.neutral[900],
+    textAlign: 'center',
   },
-  address: {
-    fontSize: 14,
-    color: '#171717', // Neutral text
-    lineHeight: 20,
+  disabledButton: {
+    opacity: 0.5,
   },
 });

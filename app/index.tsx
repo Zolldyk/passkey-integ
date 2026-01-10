@@ -2,6 +2,8 @@ import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'rea
 import { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { useWallet } from '@lazorkit/wallet-mobile-adapter';
+import { WalletService } from '../services/WalletService';
+import type { WalletSession } from '../types';
 
 /**
  * Welcome/Onboarding Screen
@@ -30,16 +32,77 @@ export default function WelcomeScreen() {
   const wallet = useWallet();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const [checkingSession, setCheckingSession] = useState(true);
+
+  /**
+   * Check SecureStore for existing session on app launch.
+   * If valid session found, auto-navigate to home screen to avoid re-authentication.
+   * If no session or invalid session, show welcome screen for wallet creation.
+   */
+  useEffect(() => {
+    async function checkExistingSession() {
+      try {
+        const session = await WalletService.loadSession();
+        const isValid = WalletService.isSessionValid(session);
+
+        if (isValid) {
+          if (__DEV__) {
+            console.log('[WelcomeScreen] Valid session found, auto-navigating to home');
+          }
+          // Auto-navigate to home if valid session found, avoiding re-authentication
+          router.replace('/home');
+        } else {
+          if (__DEV__) {
+            console.log('[WelcomeScreen] No valid session found, showing welcome screen');
+          }
+        }
+      } catch (error) {
+        console.error('[WelcomeScreen] Error checking session:', error);
+        // On error, show welcome screen and let user create new wallet
+      } finally {
+        setCheckingSession(false);
+      }
+    }
+
+    checkExistingSession();
+  }, [router]);
 
   /**
    * Automatically navigate to home screen when wallet connection completes successfully.
    * This effect monitors the wallet connection state and redirects once authentication is complete.
+   * Also persists wallet session to SecureStore for automatic reconnection on app restart.
    */
   useEffect(() => {
-    if (wallet.isConnected) {
-      console.log('Wallet connected. Public key:', wallet.smartWalletPubkey?.toString());
-      router.replace('/home');
+    async function saveSessionAndNavigate() {
+      if (wallet.isConnected && wallet.smartWalletPubkey) {
+        if (__DEV__) {
+          const pubkey = wallet.smartWalletPubkey.toString();
+          console.log('Wallet connected. Public key:', pubkey.substring(0, 8) + '...' + pubkey.substring(pubkey.length - 4));
+        }
+
+        // Persist wallet session to SecureStore for automatic reconnection on app restart
+        try {
+          const session: WalletSession = {
+            publicKey: wallet.smartWalletPubkey.toString(),
+            credentialId: 'lazorkit', // MVP: Placeholder credential ID
+            createdAt: Date.now(),
+            lastAccessedAt: Date.now(),
+          };
+
+          await WalletService.saveSession(session);
+          if (__DEV__) {
+            console.log('Session saved successfully before navigation');
+          }
+        } catch (error) {
+          // Log error but still navigate to home - session save failure shouldn't block user
+          console.error('Failed to save session, but proceeding to home:', error);
+        }
+
+        router.replace('/home');
+      }
     }
+
+    saveSessionAndNavigate();
   }, [wallet.isConnected, wallet.smartWalletPubkey, router]);
 
   /**
@@ -74,6 +137,17 @@ export default function WelcomeScreen() {
     }
   };
 
+  // Show loading indicator while checking for existing session
+  if (checkingSession) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#9945FF" />
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+
+  // Render welcome screen if no valid session found
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -138,11 +212,11 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   button: {
-    backgroundColor: '#9945FF', // Solana brand purple - primary action color
+    backgroundColor: '#9945FF', 
     paddingVertical: 14,
     paddingHorizontal: 32,
     borderRadius: 8,
-    minHeight: 48, // Meets accessibility minimum (44pt iOS / 48dp Android)
+    minHeight: 48, 
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
@@ -164,6 +238,11 @@ const styles = StyleSheet.create({
     color: '#EF4444', // Error red
     fontSize: 14,
     textAlign: 'center',
+    marginTop: 16,
+  },
+  loadingText: {
+    fontSize: 15, // Body size
+    color: '#171717',
     marginTop: 16,
   },
 });

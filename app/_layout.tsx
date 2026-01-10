@@ -11,6 +11,9 @@ import { Stack } from 'expo-router';
 /**
  * Root layout component for the Lazorkit Mobile Wallet Starter.
  * Configures the LazorKitProvider with Devnet RPC, Portal, and Paymaster.
+ *
+ * Note: Session loading and auto-navigation handled in Welcome screen (index.tsx) for simplicity.
+ * The SDK manages its own wallet state internally.
  */
 export default function RootLayout() {
   return (
