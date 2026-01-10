@@ -23,7 +23,10 @@ export default function RootLayout() {
     >
       <Stack>
         <Stack.Screen name="index" options={{ title: 'Welcome' }} />
-        {/* Future screens will be added in later stories */}
+        {/* Callback screen - handles deep link redirect from Portal */}
+        <Stack.Screen name="callback" options={{ headerShown: false }} />
+        {/* Home screen - displays wallet address after successful authentication */}
+        <Stack.Screen name="home" options={{ title: 'Wallet' }} />
       </Stack>
     </LazorKitProvider>
   );

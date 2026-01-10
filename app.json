@@ -2,6 +2,7 @@
   "expo": {
     "name": "Lazorkit Mobile Starter",
     "slug": "lazorkit-mobile-starter",
+    "owner": "zolll",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,6 +32,12 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5c40627d-ae07-4e90-bac3-bcbd2487de9b"
+      }
+    }
   }
 }
