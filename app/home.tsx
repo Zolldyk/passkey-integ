@@ -78,6 +78,18 @@ export default function HomeScreen() {
       {/* Placeholder for balance (Epic 2 feature) */}
       <Text style={styles.balanceText}>Balance: Coming soon in Epic 2</Text>
 
+      {/* Navigate to transfer form for USDC transfers (Story 2.1) */}
+      <TouchableOpacity
+        style={styles.sendButton}
+        onPress={() => router.push('/transfer')}
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Send USDC"
+        accessibilityHint="Opens transfer form to send USDC to another wallet"
+      >
+        <Text style={styles.sendButtonText}>Send USDC</Text>
+      </TouchableOpacity>
+
       {/* Disconnect button with loading state */}
       <TouchableOpacity
         style={[
@@ -120,6 +132,21 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.body, // 15pt
     color: Colors.neutral[900],
     marginVertical: Spacing.lg, // 16pt
+  },
+  sendButton: {
+    height: 44, // WCAG AA minimum touch target
+    backgroundColor: Colors.primary.purple, // Solana purple
+    borderRadius: BorderRadius.sm, // 8pt
+    paddingHorizontal: Spacing.lg, // 16pt
+    marginTop: Spacing.xxl, // 32pt
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendButtonText: {
+    color: '#fff',
+    fontSize: Typography.fontSize.body, // 15pt
+    fontWeight: Typography.fontWeight.semibold, // 600
+    textAlign: 'center',
   },
   disconnectButton: {
     height: 44, // WCAG AA minimum touch target

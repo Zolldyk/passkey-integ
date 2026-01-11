@@ -30,6 +30,8 @@ export default function RootLayout() {
         <Stack.Screen name="callback" options={{ headerShown: false }} />
         {/* Home screen - displays wallet address after successful authentication */}
         <Stack.Screen name="home" options={{ title: 'Wallet' }} />
+        {/* Transfer screen - USDC transfer form with input validation (Story 2.1) */}
+        <Stack.Screen name="transfer" options={{ title: 'Send USDC' }} />
       </Stack>
     </LazorKitProvider>
   );
