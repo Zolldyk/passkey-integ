@@ -14,6 +14,47 @@ A production-ready React Native starter template demonstrating biometric wallet 
 - **File-Based Navigation with Expo Router** - Intuitive routing built on React Navigation with deep linking support
 - **Educational Tutorials and Documentation** - Step-by-step guides covering wallet creation and transaction implementation
 
+## Live Demo
+
+See the app:
+
+**QR Code & Download:** Scan with your device camera or Expo Go app:
+
+ **[EAS Android Build URL](https://expo.dev/accounts/zolll/projects/lazorkit-mobile-starter/builds/29dfd3ab-c257-44b7-83fb-905c2abbce81)**
+
+**Instructions:**
+1. Install **Expo Go** from App Store (iOS) or Google Play (Android)
+2. Scan the QR code from the build URL above, or download the APK/IPA directly
+3. The app will install and launch on your device
+
+**Note:** This app runs on **Solana Devnet** (test network). Get test USDC from [SPL Token Faucet](https://spl-token-faucet.com/?token-name=USDC-Dev) to try transfers.
+
+---
+
+## Demo Videos
+
+### Wallet Creation with Touch ID/Face ID
+*[https://www.loom.com/share/5f6ebe191a164d11a4f203de7f8a1404]*
+
+### Gasless USDC Transfer
+*[https://www.loom.com/share/3e8035f7690147cc96e3b73c64bb6504]* 
+
+---
+
+## Screenshots
+
+### Key Screens
+
+| Screen | Description | File Path |
+|--------|-------------|-----------|
+| Welcome Screen | Initial onboarding with "Create Wallet" button | `/screenshots/welcome.jpeg` |
+| Passkey Authentication | Passkey authentication for wallet address setup | `/screenshots/passkey-auth.jpeg` |
+| Fingerprint verification | Fingerprint as a means of biometric authentication | `/screenshots/fingerprint.jpeg` |
+| Wallet Home | Wallet address, SOL balance, USDC balance, "Send USDC" button | `/wallet-home.jpeg` |
+| Transfer Form | Input fields for recipient and amount | `/screenshots/transfer-form.jpeg` |
+
+---
+
 ## Architecture Overview
 
 This is a **client-side mobile application** built with React Native and Expo. There is no custom backend - the app communicates directly with Solana Devnet RPC and Lazorkit services (Portal for authentication, Paymaster for gasless transactions). The architecture emphasizes simplicity and educational clarity, making it ideal for developers learning Solana mobile development.
