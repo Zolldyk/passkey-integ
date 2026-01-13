@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Welcome to this hands-on tutorial on implementing biometric wallet authentication using the Lazorkit SDK! In this tutorial, you'll learn how to create a seamless wallet creation experience powered by WebAuthn passkeys—no seed phrases, no passwords, just your fingerprint or face.
+Welcome to this hands-on tutorial on implementing biometric wallet authentication using the Lazorkit SDK! In this tutorial, you'll learn how to create a seamless wallet creation experience powered by WebAuthn passkeys—no seed phrases, no passwords, just your fingerprint or face id.
 
 **What You'll Build:**
 
@@ -631,7 +631,6 @@ useEffect(() => {
 3. The Lazorkit SDK imports `react-native-get-random-values` internally, so you don't need to import it explicitly
 4. Verify all polyfill packages are installed: `npm list react-native-get-random-values react-native-url-polyfill buffer`
 
-**Reference**: This was a critical issue during initial implementation, documented in [Story 1.1 Dev Agent Record].
 
 ### Issue 2: "Deep link not opening app after authentication"
 

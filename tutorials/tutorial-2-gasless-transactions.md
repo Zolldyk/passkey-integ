@@ -21,11 +21,11 @@ A paymaster is a third-party service that pays transaction fees on behalf of use
 
 Before starting this tutorial, you should have:
 
-- ✅ Completed [Tutorial 1: Wallet Creation with Biometric Authentication](./tutorial-1-wallet-creation.md)
-- ✅ Basic understanding of React Native and Expo
-- ✅ Familiarity with Solana blockchain concepts (accounts, transactions, tokens)
-- ✅ Knowledge of TypeScript and async/await patterns
-- ✅ Understanding of `@solana/web3.js` library basics
+- Completed [Tutorial 1: Wallet Creation with Biometric Authentication](./tutorial-1-wallet-creation.md)
+- Basic understanding of React Native and Expo
+- Familiarity with Solana blockchain concepts (accounts, transactions, tokens)
+- Knowledge of TypeScript and async/await patterns
+- Understanding of `@solana/web3.js` library basics
 
 ### What You'll Build
 
