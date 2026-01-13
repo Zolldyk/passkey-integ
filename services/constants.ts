@@ -1,3 +1,5 @@
+import { PublicKey } from '@solana/web3.js';
+
 /**
  * Design Tokens for Passkey Integration App
  *
@@ -29,6 +31,8 @@ export const Colors = {
     50: '#FAFAFA',
     /** Secondary background color */
     100: '#F5F5F5',
+    /** Medium gray for borders and secondary UI elements */
+    500: '#737373',
     /** Primary text color */
     900: '#171717',
   },
@@ -111,3 +115,36 @@ export const BorderRadius = {
   /** Full radius (999pt) - pills, circular buttons */
   full: 999,
 };
+
+/**
+ * USDC SPL Token mint address on Solana Devnet.
+ *
+ * This is the official Devnet USDC token mint address used for all token operations.
+ * On mainnet, this would be replaced with the mainnet USDC mint address.
+ *
+ * Address: Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr
+ */
+export const USDC_MINT_DEVNET = new PublicKey(
+  'Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'
+);
+
+/**
+ * Solana Devnet RPC endpoint URL.
+ *
+ * Public RPC endpoint for connecting to Solana Devnet blockchain.
+ * Used for querying account data, sending transactions, and confirming transaction status.
+ *
+ * Rate Limit: ~40 requests per 10 seconds per IP (public endpoint)
+ * For production use, consider using a paid RPC provider (QuickNode, Alchemy, Helius)
+ */
+export const SOLANA_RPC_URL = 'https://api.devnet.solana.com';
+
+/**
+ * Solana Explorer base URL.
+ *
+ * Used to construct deep links to view transaction details on Solana Explorer.
+ * Append transaction signature and cluster parameter to create full URL.
+ *
+ * Example: https://explorer.solana.com/tx/SIGNATURE?cluster=devnet
+ */
+export const SOLANA_EXPLORER_URL = 'https://explorer.solana.com';

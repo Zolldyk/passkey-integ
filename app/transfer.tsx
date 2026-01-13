@@ -10,13 +10,13 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
-import { useWallet } from '@lazorkit/wallet-mobile-adapter';
 import {
   isValidSolanaAddress,
   isValidAmount,
   formatUSDCAmountToLamports,
 } from '../utils/ValidationUtils';
 import { Colors, Typography, Spacing, BorderRadius } from '../services/constants';
+import { TransactionRequest } from '../types';
 
 /**
  * Transfer Form Screen
@@ -40,7 +40,6 @@ import { Colors, Typography, Spacing, BorderRadius } from '../services/constants
  */
 export default function TransferScreen() {
   const router = useRouter();
-  const wallet = useWallet();
 
   // Form input state (controlled components)
   const [recipientAddress, setRecipientAddress] = useState('');
@@ -142,7 +141,7 @@ export default function TransferScreen() {
     }
 
     // Prepare TransactionRequest object for confirmation screen
-    const transactionRequest = {
+    const transactionRequest: TransactionRequest = {
       recipientAddress,
       amount: parseFloat(amount),
       amountLamports: formatUSDCAmountToLamports(parseFloat(amount)),
@@ -150,7 +149,6 @@ export default function TransferScreen() {
     };
 
     // Navigate to confirmation screen (Story 2.2)
-    // Note: This route doesn't exist yet - will be created in next story
     router.push({
       pathname: '/confirm',
       params: { transactionRequest: JSON.stringify(transactionRequest) },

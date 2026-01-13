@@ -5,7 +5,9 @@ import { Buffer } from 'buffer'; // MUST be second - provides Buffer for Solana 
 global.Buffer = global.Buffer || Buffer; // Assign Buffer to global namespace
 
 // Now safe to import other modules after polyfills are loaded
+// eslint-disable-next-line import/first -- Polyfills must be imported before other modules
 import { LazorKitProvider } from '@lazorkit/wallet-mobile-adapter';
+// eslint-disable-next-line import/first -- Polyfills must be imported before other modules
 import { Stack } from 'expo-router';
 
 /**
@@ -32,6 +34,8 @@ export default function RootLayout() {
         <Stack.Screen name="home" options={{ title: 'Wallet' }} />
         {/* Transfer screen - USDC transfer form with input validation (Story 2.1) */}
         <Stack.Screen name="transfer" options={{ title: 'Send USDC' }} />
+        {/* Confirm screen - transaction confirmation and signing (Story 2.2) */}
+        <Stack.Screen name="confirm" options={{ title: 'Confirm Transaction' }} />
       </Stack>
     </LazorKitProvider>
   );

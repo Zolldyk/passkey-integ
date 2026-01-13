@@ -49,7 +49,7 @@ export function isValidSolanaAddress(address: string): ValidationResult {
   try {
     new PublicKey(address);
     return { valid: true };
-  } catch (error) {
+  } catch {
     return { valid: false, error: 'Invalid Solana address format' };
   }
 }
