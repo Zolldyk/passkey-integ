@@ -36,9 +36,6 @@ See the app:
 ### Wallet Creation with Touch ID/Face ID
 *[https://www.loom.com/share/5f6ebe191a164d11a4f203de7f8a1404]*
 
-### Gasless USDC Transfer
-*[https://www.loom.com/share/3e8035f7690147cc96e3b73c64bb6504]* 
-
 ---
 
 ## Screenshots
