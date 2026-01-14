@@ -31,7 +31,7 @@ See the app:
 
 ---
 
-## Demo Videos
+## Demo Video
 
 ### Wallet Creation with Touch ID/Face ID
 *[https://www.loom.com/share/5f6ebe191a164d11a4f203de7f8a1404]*
